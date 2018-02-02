@@ -38,6 +38,7 @@ class ProAccount < ActiveRecord::Base
   end
 
   def batches_remaining
+    return 0 unless feature_enabled? :pro_batch_access, user
     remaining = monthly_batches - user.info_request_batches.
                                     where('created_at > ?', 1.month.ago).count
     ( remaining > -1 ) ? remaining : 0
